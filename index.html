@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <title>Library</title>
+  </head>
+  <body>
+    <div class="header">
+      <div>My Library</div>
+      <button class="show" aria-haspopup="true">New Book</button>
+      <div class="mask" role="dialog"></div>
+      <form class="form">
+        <input id="input-title" placeholder="Title"></input>
+        <input id="input-author" placeholder="Author"></input>
+        <input id="input-completed" placeholder="Is completed"></input>
+        <button class="button" type="submit">Submit</button>
+      </form>
+    </div>
+    <div class="content">
+      <div class="library"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
