@@ -8,11 +8,12 @@ class Books {
   }
 
   changeStatus() {
-    if (this.completed) {
-      this.completed = false;
+    if (this.isCompleted) {
+      this.isCompleted = false;
     } else {
-      this.completed = true;
+      this.isCompleted = true;
     }
+    return this.isCompleted;
   }
 }
 
@@ -34,6 +35,24 @@ class Library {
   deleteBook(title) {
     this.books.splice(this.books.indexOf(this.getBook(title)), 1);
   }
+
+  changeStatus(title) {
+    return this.books[this.books.indexOf(this.getBook(title))].changeStatus();
+  }
+
+  getTotalBooks() {
+    return this.books.length;
+  }
+
+  getReadBooks() {
+    let readBooks = 0;
+    this.books.filter((b) => (readBooks += b.isCompleted));
+    return readBooks;
+  }
+
+  getNotReadBooks() {
+    return this.getTotalBooks() - this.getReadBooks();
+  }
 }
 
 const library = new Library();
@@ -44,47 +63,51 @@ const defaultBook = {
   isCompleted: false,
 };
 
+const defaultBook1 = {
+  title: "The God of High School 1",
+  author: "Yongje Park 1",
+  isCompleted: true,
+};
+
 const renderCard = (book) => {
   const card = document.createElement("div");
   const layer = document.createElement("div");
   const title = document.createElement("p");
   const author = document.createElement("p");
-  // const isReadBtn = document.createElement("button");
-  // const removeBtn = document.createElement("button");
+  const icon = document.createElement("div");
+  const isReadBtn = document.createElement("a");
+  const deleteBtn = document.createElement("a");
+
+  deleteBtn.onclick = deleteBook;
+  isReadBtn.onclick = readBook;
 
   card.classList.add("card");
-  // readBtn.classList.add("btn");
-  // removeBtn.classList.add("btn");
-  // removeBtn.classList.add("btn-red");
-  // readBtn.onclick = toggleRead;
-  // removeBtn.onclick = removeBook;
   layer.classList.add("layer");
+  if (book.isCompleted) {
+    layer.classList.add("layer-more");
+  }
   title.classList.add("title");
   author.classList.add("author");
-  title.textContent = `"${book.title}"`;
+  icon.classList.add("icon");
+  deleteBtn.classList.add("button", "touch", "delete");
+  isReadBtn.classList.add("button", "touch", "read-btn");
+  title.textContent = `${book.title}`;
   author.textContent = book.author;
 
-  // removeBtn.textContent = "Remove";
-
-  // if (book.isRead) {
-  //   readBtn.textContent = "Read";
-  //   readBtn.classList.add("btn-light-green");
-  // } else {
-  //   readBtn.textContent = "Not read";
-  //   readBtn.classList.add("btn-light-red");
-  // }
   card.appendChild(layer);
   card.appendChild(title);
   card.appendChild(author);
-  // card.appendChild(pages);
-  // card.appendChild(readBtn);
-  // card.appendChild(removeBtn);
+  icon.appendChild(isReadBtn);
+  icon.appendChild(deleteBtn);
+  card.appendChild(icon);
+
   libraryBook.appendChild(card);
 };
 
 const updateLibrary = () => {
   libraryBook.innerHTML = "";
   library.getBooks().forEach((book) => renderCard(book));
+  getBookStatus();
 };
 
 const getBookFromForm = () => {
@@ -96,9 +119,30 @@ const getBookFromForm = () => {
   return new Books(newBook);
 };
 
+const deleteBook = (e) => {
+  let title = e.target.parentNode.parentNode.childNodes[1].textContent;
+  library.deleteBook(title);
+  updateLibrary();
+};
+
+const readBook = (e) => {
+  let title = e.target.parentNode.parentNode.childNodes[1].textContent;
+  library.changeStatus(title);
+  updateLibrary();
+};
+
+const getBookStatus = () => {
+  totalBooks.innerHTML = `${library.getTotalBooks()}`;
+  readBooks.innerHTML = `${library.getReadBooks()}`;
+  notReadBooks.innerHTML = `${library.getNotReadBooks()}`;
+};
+
 const show = document.querySelector(".show");
 const mask = document.querySelector(".mask");
 const form = document.querySelector(".form");
+const totalBooks = document.querySelector(".total-books");
+const readBooks = document.querySelector(".read");
+const notReadBooks = document.querySelector(".not-read");
 
 show.onclick = () => mask.classList.add("active");
 
@@ -113,13 +157,7 @@ form.onsubmit = (e) => {
   closeModal();
 };
 
+library.addBook(new Books(defaultBook));
+library.addBook(new Books(defaultBook1));
 
-
-
-
-
-
-
-library.addBook(defaultBook)
-
-updateLibrary()
+updateLibrary();

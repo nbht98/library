@@ -3,21 +3,63 @@
   <head>
     <link rel="stylesheet" href="style.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <meta content="utf-8" http-equiv="encoding" />
     <title>Library</title>
   </head>
   <body>
     <div class="header">
-      <div>My Library</div>
-      <button class="show" aria-haspopup="true">New Book</button>
+      <div class="left-header">
+        <div class="main-title">My Library</div>
+        <button class="show" aria-haspopup="true">New Book</button>
+      </div>
+      <div class="right-header">
+        <div>Library Information</div>
+        <table class="table">
+          <tr>
+            <td>Total Books:</td>
+            <td class="total-books"></td>
+          </tr>
+          <tr>
+            <td>Read:</td>
+            <td class="read"></td>
+          </tr>
+          <tr>
+            <td>Not Read:</td>
+            <td class="not-read"></td>
+          </tr>
+        </table>
+      </div>
       <div class="mask" role="dialog"></div>
-      <form class="form">
-        <input id="input-title" placeholder="Title"></input>
-        <input id="input-author" placeholder="Author"></input>
-        <input id="input-completed" placeholder="Is completed"></input>
+      <!-- <form class="form">
+        <label>Title</label>
+        <input type="text" id="input-title" placeholder="Title" required></input>
+        <label>Author</label>
+
+        <input type="text" id="input-author" placeholder="Author" required></input>
+        <label>Is Read?</label>
+
+        <input type="text" id="input-completed" placeholder="Is Read"></input>
         <button class="button" type="submit">Submit</button>
-      </form>
+      </form> -->
+
+      <div class="container">
+        <form class="form">
+          <label>Title</label>
+          <input required type="text" id="input-title" placeholder="Title.."></input>
+          <label>Author</label>
+          <input required type="text" id="input-author" placeholder="Author.."></input>
+          <label>Is Read?</label>
+          <select id="input-completed">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+          <input type="submit" value="Submit">
+        </form>
+      </div>
+
     </div>
     <div class="content">
       <div class="library"></div>
