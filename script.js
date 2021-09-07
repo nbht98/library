@@ -21,9 +21,11 @@ class Library {
   constructor() {
     this.books = [];
   }
+
   addBook(book) {
     this.books.push(book);
   }
+
   getBooks() {
     return this.books;
   }
@@ -55,7 +57,7 @@ class Library {
   }
 }
 
-const library = new Library();
+let library = new Library();
 
 const defaultBook = {
   title: "The God of High School",
@@ -63,10 +65,18 @@ const defaultBook = {
   isCompleted: false,
 };
 
-const defaultBook1 = {
-  title: "The God of High School 1",
-  author: "Yongje Park 1",
-  isCompleted: true,
+const populateStorage = () => {
+  localStorage.setItem("library", JSON.stringify(library.getBooks()));
+};
+
+const getStorage = () => {
+  let storage = JSON.parse(localStorage.getItem("library"));
+  if (localStorage.getItem("library")) {
+    storage.forEach((b) => library.addBook(new Books(b)));
+  } else {
+    library = new Library();
+    library.addBook(new Books(defaultBook));
+  }
 };
 
 const renderCard = (book) => {
@@ -83,14 +93,18 @@ const renderCard = (book) => {
 
   card.classList.add("card");
   layer.classList.add("layer");
-  if (book.isCompleted) {
-    layer.classList.add("layer-more");
-  }
   title.classList.add("title");
   author.classList.add("author");
   icon.classList.add("icon");
   deleteBtn.classList.add("button", "touch", "delete");
-  isReadBtn.classList.add("button", "touch", "read-btn");
+  isReadBtn.classList.add("button", "touch");
+  if (book.isCompleted) {
+    layer.classList.add("layer-more");
+    isReadBtn.classList.add("is-read-btn");
+  } else {
+    isReadBtn.classList.add("read-btn");
+  }
+  
   title.textContent = `${book.title}`;
   author.textContent = book.author;
 
@@ -105,6 +119,7 @@ const renderCard = (book) => {
 };
 
 const updateLibrary = () => {
+  populateStorage();
   libraryBook.innerHTML = "";
   library.getBooks().forEach((book) => renderCard(book));
   getBookStatus();
@@ -114,8 +129,10 @@ const getBookFromForm = () => {
   const newBook = {
     title: document.querySelector("#input-title").value,
     author: document.querySelector("#input-author").value,
-    isCompleted: document.querySelector("#input-completed").value,
+    isCompleted:
+      document.querySelector("#input-completed").value == "true" ? true : false,
   };
+
   return new Books(newBook);
 };
 
@@ -157,7 +174,5 @@ form.onsubmit = (e) => {
   closeModal();
 };
 
-library.addBook(new Books(defaultBook));
-library.addBook(new Books(defaultBook1));
-
+getStorage();
 updateLibrary();
